@@ -5,7 +5,7 @@ import { test, before, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
-import { createEnv } from './_env.mjs';
+import { createEnv } from '../scripts/jsdom-env.mjs';
 
 let UI, win, doc, root;
 

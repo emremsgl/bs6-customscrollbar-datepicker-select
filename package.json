@@ -44,7 +44,7 @@
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node --test test/",
+    "test": "node --test",
     "check": "npm run build && npm test",
     "serve": "node scripts/serve.mjs"
   },

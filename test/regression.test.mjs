@@ -1,7 +1,7 @@
 // Regresyon testleri: bağımsız kod incelemesinde bulunan ve düzeltilen kusurlar. Çalıştırma: npm test
 import { test, before, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { createEnv } from './_env.mjs';
+import { createEnv } from '../scripts/jsdom-env.mjs';
 
 let UI, win, doc;
 const tick = (ms = 0) => new Promise((r) => setTimeout(r, ms));
