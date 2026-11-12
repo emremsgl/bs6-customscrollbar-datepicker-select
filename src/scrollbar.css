@@ -1,0 +1,401 @@
+/*!
+ * CustomScrollbar 1.0 — stil dosyası (MIT)
+ *
+ * Framework'ten bağımsızdır (Bootstrap, Tailwind, Bulma, vanilla...).
+ * Global reset içermez; tüm kurallar `.ccs-` önekiyle sınırlıdır.
+ *
+ * İki kullanım biçimi:
+ *   1) JS ile özel çubuk:  <div data-scrollbar style="max-height:300px">…</div>
+ *   2) Yalnızca CSS:       <div class="ccs-native" style="max-height:300px;overflow:auto">…</div>
+ *      (yerel çubuğu ince ve temalı gösterir; JS gerekmez)
+ *
+ * Özelleştirme (herhangi bir üst elemanda, :root'ta veya Tailwind ile [--ccs-accent:#e11d48]):
+ *   --ccs-thumb  --ccs-thumb-hover  --ccs-thumb-active  --ccs-track
+ *   --ccs-accent  --ccs-size  --ccs-thin  --ccs-thick  --ccs-inset  --ccs-shadow  --ccs-z
+ *
+ * Koyu tema: data-theme="dark", data-bs-theme="dark", .dark, .theme-dark
+ *            ya da <html data-ccs-theme="auto"> (işletim sistemi).
+ */
+
+/* ------------------------------------------------------------------ */
+/* Tasarım değişkenleri                                                */
+/* ------------------------------------------------------------------ */
+.ccs-root,
+.ccs-native,
+.ccs-hide {
+  --ccsi-thumb: var(--ccs-thumb, rgba(100, 116, 139, 0.55));
+  --ccsi-thumb-hover: var(--ccs-thumb-hover, rgba(71, 85, 105, 0.8));
+  --ccsi-accent: var(--ccs-accent, #4f46e5);
+  --ccsi-thumb-active: var(--ccs-thumb-active, var(--ccsi-accent));
+  --ccsi-track: var(--ccs-track, rgba(100, 116, 139, 0.14));
+  --ccsi-size: var(--ccs-size, 14px);        /* tıklanabilir alan kalınlığı */
+  --ccsi-thin: var(--ccs-thin, 5px);         /* boştayken çubuk kalınlığı */
+  --ccsi-thick: var(--ccs-thick, 9px);       /* üzerine gelince kalınlık */
+  --ccsi-inset: var(--ccs-inset, 4px);       /* uçlardan boşluk */
+  /* tutamaç ile yol arasındaki boşluk: yan boşluğun (üzerine gelince) aynısı uçlarda da olur */
+  --ccsi-end: calc((var(--ccsi-size) - var(--ccsi-thick)) / 2);
+  --ccsi-shadow: var(--ccs-shadow, rgba(15, 23, 42, 0.16));
+  --ccsi-shadow-size: var(--ccs-shadow-size, 22px);
+  --ccsi-ring: var(--ccs-ring, rgba(79, 70, 229, 0.45));
+  --ccsi-z: var(--ccs-z, 5);
+}
+
+/* Koyu tema */
+.ccs-root.ccs-dark,
+.ccs-native.ccs-dark,
+.dark .ccs-root, .dark .ccs-native, .dark .ccs-hide,
+[data-theme="dark"] .ccs-root, [data-theme="dark"] .ccs-native, [data-theme="dark"] .ccs-hide,
+[data-bs-theme="dark"] .ccs-root, [data-bs-theme="dark"] .ccs-native, [data-bs-theme="dark"] .ccs-hide,
+.theme-dark .ccs-root, .theme-dark .ccs-native, .theme-dark .ccs-hide,
+[data-ccs-theme="dark"] .ccs-root, [data-ccs-theme="dark"] .ccs-native {
+  --ccsi-thumb: var(--ccs-thumb, rgba(148, 163, 184, 0.45));
+  --ccsi-thumb-hover: var(--ccs-thumb-hover, rgba(203, 213, 225, 0.7));
+  --ccsi-accent: var(--ccs-accent, #818cf8);
+  --ccsi-track: var(--ccs-track, rgba(148, 163, 184, 0.16));
+  --ccsi-shadow: var(--ccs-shadow, rgba(0, 0, 0, 0.5));
+  --ccsi-ring: var(--ccs-ring, rgba(129, 140, 248, 0.55));
+}
+
+/* İşletim sistemi temasını izle (isteğe bağlı: <html data-ccs-theme="auto">) */
+@media (prefers-color-scheme: dark) {
+  [data-ccs-theme="auto"] .ccs-root,
+  [data-ccs-theme="auto"] .ccs-native {
+    --ccsi-thumb: var(--ccs-thumb, rgba(148, 163, 184, 0.45));
+    --ccsi-thumb-hover: var(--ccs-thumb-hover, rgba(203, 213, 225, 0.7));
+    --ccsi-accent: var(--ccs-accent, #818cf8);
+    --ccsi-track: var(--ccs-track, rgba(148, 163, 184, 0.16));
+    --ccsi-shadow: var(--ccs-shadow, rgba(0, 0, 0, 0.5));
+    --ccsi-ring: var(--ccs-ring, rgba(129, 140, 248, 0.55));
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* 1) Yalnızca CSS: yerel çubuğu şekillendir                           */
+/* ------------------------------------------------------------------ */
+.ccs-native {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ccsi-thumb) transparent;
+}
+.ccs-native:hover {
+  scrollbar-color: var(--ccsi-thumb-hover) transparent;
+}
+.ccs-native::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.ccs-native::-webkit-scrollbar-track {
+  background: transparent;
+}
+.ccs-native::-webkit-scrollbar-corner {
+  background: transparent;
+}
+.ccs-native::-webkit-scrollbar-thumb {
+  background: var(--ccsi-thumb);
+  background-clip: content-box;
+  border: 2px solid transparent;
+  border-radius: 999px;
+}
+.ccs-native::-webkit-scrollbar-thumb:hover {
+  background: var(--ccsi-thumb-hover);
+  background-clip: content-box;
+}
+.ccs-native::-webkit-scrollbar-thumb:active {
+  background: var(--ccsi-thumb-active);
+  background-clip: content-box;
+}
+
+/* Çubuğu gizle ama kaydırılabilir bırak */
+.ccs-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.ccs-hide::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* 2) JS ile özel çubuk                                                */
+/* ------------------------------------------------------------------ */
+.ccs-root,
+.ccs-root *,
+.ccs-root *::before,
+.ccs-root *::after {
+  box-sizing: border-box;
+}
+/* Ana eleman: dış düzenini korur, iç düzen (padding/flex/grid) .ccs-content'e aittir */
+/* NOT: display'e dokunulmaz; d-none, .collapse, [hidden] gibi gizleme yöntemleri aynen çalışır. */
+.ccs-host {
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+/* Yalnızca ölçüm sırasında (flex/grid değerlerini bildirilen haliyle okumak için) kısa süre eklenir */
+.ccs-host.ccs-probe {
+  display: block !important;
+}
+
+/* Kaydırılan alan: kaydırma tarayıcıda kalır, yerel çubuk gizlenir */
+.ccs-viewport {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  max-height: inherit;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  outline: 0;
+  /* host flex / grid ise tek öğe olarak tüm alanı kaplar */
+  flex: 1 1 auto;
+  align-self: stretch;
+  justify-self: stretch;
+  grid-column: 1 / -1;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+.ccs-viewport::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+.ccs-viewport:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--ccsi-ring);
+}
+.ccs-content {
+  min-height: 100%;
+}
+.ccs-gutter.ccs-has-y > .ccs-viewport {
+  width: auto;
+  margin-inline-end: var(--ccsi-size);
+}
+
+/* Çubuk yolu */
+.ccs-track {
+  position: absolute;
+  z-index: var(--ccsi-z);
+  display: none;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: opacity 0.25s ease, background-color 0.15s ease;
+}
+.ccs-y {
+  top: var(--ccsi-inset);
+  bottom: var(--ccsi-inset);
+  right: 0;
+  inset-inline-end: 0;
+  width: var(--ccsi-size);
+}
+.ccs-x {
+  right: var(--ccsi-inset);
+  left: var(--ccsi-inset);
+  inset-inline: var(--ccsi-inset);
+  bottom: 0;
+  height: var(--ccsi-size);
+}
+/* iki eksen birden: köşede çakışmasınlar (RTL'de dikey çubuk solda olduğundan mantıksal özellik) */
+.ccs-both > .ccs-y {
+  bottom: calc(var(--ccsi-size) + var(--ccsi-inset));
+}
+.ccs-both > .ccs-x {
+  right: calc(var(--ccsi-size) + var(--ccsi-inset));
+  inset-inline-end: calc(var(--ccsi-size) + var(--ccsi-inset));
+}
+.ccs-has-y > .ccs-y,
+.ccs-has-x > .ccs-x {
+  display: block;
+}
+.ccs-active.ccs-has-y > .ccs-y,
+.ccs-active.ccs-has-x > .ccs-x {
+  opacity: 1;
+  pointer-events: auto;
+}
+.ccs-track:hover,
+.ccs-dragging > .ccs-track.ccs-on {
+  background: var(--ccsi-track);
+}
+
+/* Tutamaç: boyut ve konum JS ile verilir (transform → GPU) */
+.ccs-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  inset-inline-start: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  cursor: default;
+  touch-action: none;
+  will-change: transform;
+}
+.ccs-thumb::before {
+  content: "";
+  position: absolute;
+  background: var(--ccsi-thumb);
+  border-radius: 999px;
+  transition: width 0.15s ease, height 0.15s ease, background-color 0.15s ease;
+}
+/* Tutamaç yolun ortasında: yanlarda eşit boşluk; uçlarda yolun iç boşluğu (padding) kadar */
+.ccs-y {
+  padding: var(--ccsi-end) 0;
+}
+.ccs-x {
+  padding: 0 var(--ccsi-end);
+}
+.ccs-y .ccs-thumb {
+  top: var(--ccsi-end);
+}
+.ccs-x .ccs-thumb {
+  left: var(--ccsi-end);
+  inset-inline-start: var(--ccsi-end);
+}
+.ccs-y .ccs-thumb::before {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0 auto;
+  width: var(--ccsi-thin);
+}
+.ccs-x .ccs-thumb::before {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto 0;
+  height: var(--ccsi-thin);
+}
+.ccs-track:hover .ccs-thumb::before,
+.ccs-track.ccs-on .ccs-thumb::before {
+  background: var(--ccsi-thumb-hover);
+}
+.ccs-y:hover .ccs-thumb::before,
+.ccs-y.ccs-on .ccs-thumb::before {
+  width: var(--ccsi-thick);
+}
+.ccs-x:hover .ccs-thumb::before,
+.ccs-x.ccs-on .ccs-thumb::before {
+  height: var(--ccsi-thick);
+}
+.ccs-track .ccs-thumb:active::before,
+.ccs-dragging .ccs-track.ccs-on .ccs-thumb::before {
+  background: var(--ccsi-thumb-active);
+}
+
+/* Kenar gölgeleri (shadows: true): kaydırılacak içerik olduğunu ima eder */
+.ccs-shade {
+  position: absolute;
+  z-index: calc(var(--ccsi-z) - 1);
+  display: none;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.ccs-shadows > .ccs-shade {
+  display: block;
+}
+.ccs-sh-t, .ccs-sh-b { left: 0; right: 0; height: var(--ccsi-shadow-size); }
+.ccs-sh-l, .ccs-sh-r { top: 0; bottom: 0; width: var(--ccsi-shadow-size); }
+.ccs-sh-t { top: 0; background: linear-gradient(to bottom, var(--ccsi-shadow), transparent); }
+.ccs-sh-b { bottom: 0; background: linear-gradient(to top, var(--ccsi-shadow), transparent); }
+.ccs-sh-l { left: 0; background: linear-gradient(to right, var(--ccsi-shadow), transparent); }
+.ccs-sh-r { right: 0; background: linear-gradient(to left, var(--ccsi-shadow), transparent); }
+.ccs-can-up > .ccs-sh-t,
+.ccs-can-down > .ccs-sh-b,
+.ccs-can-start > .ccs-sh-l,
+.ccs-can-end > .ccs-sh-r {
+  opacity: 1;
+}
+[dir="rtl"] .ccs-can-start > .ccs-sh-l { opacity: 0; }
+[dir="rtl"] .ccs-can-start > .ccs-sh-r { opacity: 1; }
+[dir="rtl"] .ccs-can-end > .ccs-sh-r { opacity: 0; }
+[dir="rtl"] .ccs-can-end > .ccs-sh-l { opacity: 1; }
+
+/* Boyutlar */
+.ccs-sm { --ccsi-size: var(--ccs-size, 10px); --ccsi-thin: var(--ccs-thin, 3px); --ccsi-thick: var(--ccs-thick, 6px); }
+.ccs-lg { --ccsi-size: var(--ccs-size, 18px); --ccsi-thin: var(--ccs-thin, 7px); --ccsi-thick: var(--ccs-thick, 12px); }
+
+/* Sürüklerken metin seçimi olmasın */
+html.ccs-noselect,
+html.ccs-noselect * {
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  cursor: grabbing !important;
+}
+
+/* Sayfa çubuğu (CustomScrollbar.page()) */
+.ccs-page {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: var(--ccs-page-z, 2147483000);
+  pointer-events: none;
+}
+.ccs-page > .ccs-y {
+  top: 6px;
+  bottom: 6px;
+}
+.ccs-page > .ccs-x {
+  right: 6px;
+  left: 6px;
+  inset-inline: 6px;
+}
+.ccs-page.ccs-both > .ccs-y { bottom: calc(var(--ccsi-size) + 6px); }
+.ccs-page.ccs-both > .ccs-x {
+  right: calc(var(--ccsi-size) + 6px);
+  inset-inline-end: calc(var(--ccsi-size) + 6px);
+}
+html.ccs-page-on {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html.ccs-page-on::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Dokunmatik: daha geniş hedef */
+@media (pointer: coarse) {
+  .ccs-root {
+    --ccsi-size: var(--ccs-size, 20px);
+    --ccsi-thin: var(--ccs-thin, 4px);
+    --ccsi-thick: var(--ccs-thick, 8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ccs-root *,
+  .ccs-root *::before {
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .ccs-thumb::before {
+    background: ButtonText;
+  }
+  .ccs-track:hover {
+    background: ButtonFace;
+  }
+}
+
+@media print {
+  .ccs-track,
+  .ccs-shade {
+    display: none !important;
+  }
+}

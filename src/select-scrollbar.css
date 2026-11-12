@@ -1,0 +1,86 @@
+/*!
+ * CustomSelectScrollbar 1.0 — stil dosyası (MIT)
+ *
+ * custom-select.css ve custom-scrollbar.css'ten SONRA yüklenmelidir.
+ * Çubuğun renkleri select'in tema değişkenlerinden (--csi-*) türetilir; yani
+ * --cs-accent, koyu tema vb. ayarlar çubuğa da otomatik yansır.
+ *
+ * Çubuğa özel ince ayar (menü içinde): --ccs-size  --ccs-thin  --ccs-thick  --ccs-inset
+ *   --ccs-thumb  --ccs-thumb-hover  --ccs-track  --ccs-shadow  --ccs-shadow-size
+ */
+
+/* Renkler: menü zaten --csi-* değişkenlerini taşır (tema + vurgu rengi) */
+.cs-menu {
+  --ccs-thumb: var(--csi-placeholder);
+  --ccs-thumb-hover: var(--csi-muted);
+  --ccs-thumb-active: var(--csi-accent);
+  --ccs-track: var(--csi-hover);
+  --ccs-ring: var(--csi-ring);
+  /* Kenar solması: menü zemin rengine karışır (açık ve koyu temada doğru yönde çalışır) */
+  --ccs-shadow: var(--csi-menu-bg);
+}
+@supports (color: color-mix(in srgb, red, blue)) {
+  .cs-menu {
+    --ccs-shadow: color-mix(in srgb, var(--csi-menu-bg) 88%, transparent);
+  }
+}
+
+/*
+ * Sarmalayıcı: menünün (dikey flex) esneyen, küçülebilen bölümü. Eski .cs-list'in rolü.
+ * display:flex olması önemlidir: iç kaydırıcı, yüzde yükseklik yerine flex küçülmesiyle
+ * sınırlanır (menünün yalnızca max-height'ı vardır, kesin yüksekliği yoktur).
+ */
+.cs-scroll {
+  --ccs-inset: 6px;
+  --ccs-shadow-size: 14px;
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+/* Fare/klavye ile ince, dokunmatikte geniş hedef (boyut seçeneği verilmediyse) */
+.cs-scroll:not(.ccs-sm):not(.ccs-lg) {
+  --ccs-size: 12px;
+  --ccs-thin: 4px;
+  --ccs-thick: 7px;
+}
+@media (pointer: coarse) {
+  .cs-scroll:not(.ccs-sm):not(.ccs-lg) {
+    --ccs-size: 20px;
+    --ccs-thin: 5px;
+    --ccs-thick: 9px;
+  }
+}
+
+/*
+ * CustomScrollbar, düzeni ölçerken sarmalayıcıyı kısa süre `display:block` yapar (.ccs-probe).
+ * Bu sırada iç kaydırıcının flex ile sınırlanan yüksekliği kalkar, tarayıcı kaydırma konumunu
+ * 0'a kırpar ve menü açılırken seçili öğeye yapılan kaydırma (ya da pencere yeniden
+ * boyutlanınca mevcut konum) kaybolur. Sarmalayıcının display'i zaten flex olduğundan
+ * ölçüm sonucu değişmez; probe sırasında da flex kalsın.
+ */
+.cs-scroll.ccs-probe {
+  display: flex !important;
+}
+
+/* Menü sayfa kaydırmasına zincirlenmesin (orijinal .cs-list'teki davranış) */
+.cs-scroll > .ccs-viewport {
+  overscroll-behavior: contain;
+}
+
+/* Liste artık kaydırmaz; yalnızca içeriktir. Kaydırmayı .ccs-viewport yapar. */
+.cs-scroll .cs-list {
+  flex: 0 0 auto;
+  max-height: none;
+  overflow: visible;
+}
+
+/* Mobil sayfa (bottom sheet): ayırıcı çizgi kayan içerikle birlikte gitmesin */
+.cs-menu.cs-sheet .cs-scroll {
+  border-top: 1px solid var(--csi-divider);
+}
+.cs-menu.cs-sheet .cs-scroll .cs-list {
+  border-top: 0;
+}

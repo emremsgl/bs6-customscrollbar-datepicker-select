@@ -1,0 +1,7 @@
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+# dist/ bilerek sürüm kontrolünde: CDN (jsDelivr/unpkg) ve doğrudan <script src> kullanımı için

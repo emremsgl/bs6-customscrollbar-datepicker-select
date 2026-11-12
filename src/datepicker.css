@@ -1,0 +1,649 @@
+/*!
+ * CustomDatePicker 1.0 — stil dosyası (MIT)
+ *
+ * Framework'ten bağımsızdır (Bootstrap, Tailwind, Bulma, vanilla...).
+ * Global reset içermez; tüm kurallar `.cdp-` önekiyle sınırlıdır.
+ * Girdi (input) olduğu gibi kalır; görünümünü framework'ünüz belirler.
+ *
+ * Özelleştirme (herhangi bir üst elemanda, :root'ta veya Tailwind ile [--cdp-accent:#e11d48]):
+ *   --cdp-accent  --cdp-accent-soft  --cdp-accent-text  --cdp-on-accent
+ *   --cdp-bg  --cdp-fg  --cdp-muted  --cdp-border  --cdp-divider  --cdp-hover  --cdp-ring
+ *   --cdp-radius  --cdp-cell  --cdp-font-size  --cdp-shadow  --cdp-z
+ *
+ * Koyu tema: data-theme="dark", data-bs-theme="dark", .dark, .theme-dark
+ *            ya da <html data-cdp-theme="auto"> (işletim sistemi).
+ */
+
+/* ------------------------------------------------------------------ */
+/* Tasarım değişkenleri (iç değişkenler --cdpi-*, genel API --cdp-*)    */
+/* ------------------------------------------------------------------ */
+.cdp-root,
+.cdp-input {
+  --cdpi-accent: var(--cdp-accent, #4f46e5);
+  --cdpi-accent-soft: var(--cdp-accent-soft, rgba(79, 70, 229, 0.12));
+  --cdpi-accent-text: var(--cdp-accent-text, #4338ca);
+  --cdpi-on-accent: var(--cdp-on-accent, #fff);
+  --cdpi-ring: var(--cdp-ring, rgba(79, 70, 229, 0.35));
+  --cdpi-bg: var(--cdp-bg, #fff);
+  --cdpi-fg: var(--cdp-fg, #0f172a);
+  --cdpi-muted: var(--cdp-muted, #64748b);
+  --cdpi-faint: var(--cdp-faint, #94a3b8);
+  --cdpi-border: var(--cdp-border, #cbd5e1);
+  --cdpi-divider: var(--cdp-divider, #e2e8f0);
+  --cdpi-hover: var(--cdp-hover, #f1f5f9);
+  --cdpi-radius: var(--cdp-radius, 0.875rem);
+  --cdpi-cell: var(--cdp-cell, 2.5rem);
+  --cdpi-font-size: var(--cdp-font-size, 0.9375rem);
+  --cdpi-shadow: var(--cdp-shadow, 0 20px 44px -10px rgba(15, 23, 42, 0.25), 0 4px 14px rgba(15, 23, 42, 0.08));
+  --cdpi-z: var(--cdp-z, 2000);
+}
+@supports (color: color-mix(in srgb, red, blue)) {
+  .cdp-root,
+  .cdp-input {
+    --cdpi-accent-soft: var(--cdp-accent-soft, color-mix(in srgb, var(--cdpi-accent) 12%, transparent));
+    --cdpi-accent-text: var(--cdp-accent-text, color-mix(in srgb, var(--cdpi-accent) 82%, #000));
+    --cdpi-ring: var(--cdp-ring, color-mix(in srgb, var(--cdpi-accent) 35%, transparent));
+  }
+}
+
+/* Koyu tema */
+.cdp-root.cdp-dark,
+.cdp-input.cdp-dark,
+.dark .cdp-root, .dark .cdp-input,
+[data-theme="dark"] .cdp-root, [data-theme="dark"] .cdp-input,
+[data-bs-theme="dark"] .cdp-root, [data-bs-theme="dark"] .cdp-input,
+.theme-dark .cdp-root, .theme-dark .cdp-input,
+[data-cdp-theme="dark"] .cdp-root, [data-cdp-theme="dark"] .cdp-input {
+  --cdpi-accent: var(--cdp-accent, #6366f1);
+  --cdpi-accent-soft: var(--cdp-accent-soft, rgba(129, 140, 248, 0.18));
+  --cdpi-accent-text: var(--cdp-accent-text, #a5b4fc);
+  --cdpi-ring: var(--cdp-ring, rgba(129, 140, 248, 0.45));
+  --cdpi-bg: var(--cdp-bg, #1e293b);
+  --cdpi-fg: var(--cdp-fg, #f1f5f9);
+  --cdpi-muted: var(--cdp-muted, #94a3b8);
+  --cdpi-faint: var(--cdp-faint, #64748b);
+  --cdpi-border: var(--cdp-border, #3b4a63);
+  --cdpi-divider: var(--cdp-divider, #334155);
+  --cdpi-hover: var(--cdp-hover, rgba(148, 163, 184, 0.16));
+  --cdpi-shadow: var(--cdp-shadow, 0 24px 50px -12px rgba(0, 0, 0, 0.7), 0 4px 14px rgba(0, 0, 0, 0.4));
+}
+@supports (color: color-mix(in srgb, red, blue)) {
+  .cdp-root.cdp-dark,
+  .cdp-input.cdp-dark,
+  .dark .cdp-root, .dark .cdp-input,
+  [data-theme="dark"] .cdp-root, [data-theme="dark"] .cdp-input,
+  [data-bs-theme="dark"] .cdp-root, [data-bs-theme="dark"] .cdp-input,
+  .theme-dark .cdp-root, .theme-dark .cdp-input,
+  [data-cdp-theme="dark"] .cdp-root, [data-cdp-theme="dark"] .cdp-input {
+    --cdpi-accent-soft: var(--cdp-accent-soft, color-mix(in srgb, var(--cdpi-accent) 20%, transparent));
+    --cdpi-accent-text: var(--cdp-accent-text, color-mix(in srgb, var(--cdpi-accent) 70%, #fff));
+    --cdpi-ring: var(--cdp-ring, color-mix(in srgb, var(--cdpi-accent) 45%, transparent));
+  }
+}
+@media (prefers-color-scheme: dark) {
+  [data-cdp-theme="auto"] .cdp-root,
+  [data-cdp-theme="auto"] .cdp-input {
+    --cdpi-accent: var(--cdp-accent, #6366f1);
+    --cdpi-accent-soft: var(--cdp-accent-soft, rgba(129, 140, 248, 0.18));
+    --cdpi-accent-text: var(--cdp-accent-text, #a5b4fc);
+      --cdpi-ring: var(--cdp-ring, rgba(129, 140, 248, 0.45));
+    --cdpi-bg: var(--cdp-bg, #1e293b);
+    --cdpi-fg: var(--cdp-fg, #f1f5f9);
+    --cdpi-muted: var(--cdp-muted, #94a3b8);
+    --cdpi-faint: var(--cdp-faint, #64748b);
+    --cdpi-border: var(--cdp-border, #3b4a63);
+    --cdpi-divider: var(--cdp-divider, #334155);
+    --cdpi-hover: var(--cdp-hover, rgba(148, 163, 184, 0.16));
+    --cdpi-shadow: var(--cdp-shadow, 0 24px 50px -12px rgba(0, 0, 0, 0.7), 0 4px 14px rgba(0, 0, 0, 0.4));
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Temel                                                                */
+/* ------------------------------------------------------------------ */
+.cdp-root,
+.cdp-root *,
+.cdp-root *::before,
+.cdp-root *::after {
+  box-sizing: border-box;
+}
+.cdp-root [hidden],
+.cdp-root[hidden] {
+  display: none !important;
+}
+/* :where → özgüllük 0; bileşen sınıfları (.cdp-link, .cdp-foot-btn …) bu sıfırlamayı ezebilsin */
+:where(.cdp-root) button {
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: center;
+  text-transform: none;
+  letter-spacing: normal;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* ------------------------------------------------------------------ */
+/* Açılır pencere (body'ye taşınır; modal / overflow içinde kırpılmaz)  */
+/* ------------------------------------------------------------------ */
+.cdp-popup {
+  position: fixed;
+  z-index: var(--cdpi-z);
+  display: none;
+  flex-direction: column;
+  width: max-content;
+  max-width: calc(100vw - 16px);
+  margin: 0;
+  padding: 0.75rem;
+  overflow: auto;
+  font-family: inherit;
+  font-size: var(--cdpi-font-size);
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--cdpi-fg);
+  text-align: start;
+  text-transform: none;
+  letter-spacing: normal;
+  background: var(--cdpi-bg);
+  border: 1px solid var(--cdpi-divider);
+  border-radius: var(--cdpi-radius);
+  box-shadow: var(--cdpi-shadow);
+  transform-origin: top left;
+  -webkit-user-select: none;
+  user-select: none;
+  overscroll-behavior: contain;
+}
+.cdp-popup.cdp-show {
+  display: flex;
+  animation: cdp-pop 0.16s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.cdp-popup.cdp-up {
+  transform-origin: bottom left;
+}
+.cdp-popup.cdp-up.cdp-show {
+  animation-name: cdp-pop-up;
+}
+
+/* Satır içi (inline) takvim: sayfanın içinde durur */
+.cdp-inline {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+.cdp-inline > .cdp-popup {
+  position: relative;
+  z-index: auto;
+  display: flex;
+  max-width: 100%;
+  box-shadow: none;
+  animation: none;
+  border-color: var(--cdpi-divider);
+}
+
+/* Başlık (yalnızca mobil sayfa modunda) */
+.cdp-head {
+  display: none;
+  flex: none;
+  margin: -0.75rem -0.75rem 0.25rem;
+  padding: 0.5rem 0.5rem 0.25rem 1rem;
+  touch-action: none;
+  cursor: grab;
+}
+.cdp-sheet .cdp-head {
+  display: block;
+}
+.cdp-grab {
+  display: block;
+  width: 2.5rem;
+  height: 0.25rem;
+  margin: 0 auto 0.35rem;
+  background: var(--cdpi-border);
+  border-radius: 99px;
+}
+.cdp-head-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 2.5rem;
+}
+.cdp-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 1.05em;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cdp-sheet-close {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  color: var(--cdpi-muted);
+  cursor: pointer;
+  background: var(--cdpi-hover) !important;
+  border-radius: 50% !important;
+}
+.cdp-sheet-close svg {
+  display: block;
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+/* Hazır aralıklar (presets) */
+.cdp-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 0.6rem;
+}
+.cdp-preset {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.82em;
+  font-weight: 600;
+  color: var(--cdpi-accent-text);
+  cursor: pointer;
+  background: var(--cdpi-accent-soft) !important;
+  border-radius: 999px !important;
+  transition: box-shadow 0.15s ease;
+}
+.cdp-preset:hover {
+  box-shadow: inset 0 0 0 1px var(--cdpi-accent);
+}
+
+/* ------------------------------------------------------------------ */
+/* Takvim                                                               */
+/* ------------------------------------------------------------------ */
+.cdp-cal {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+.cdp-month {
+  width: calc(var(--cdpi-cell) * 7);
+}
+.cdp-month.cdp-wk {
+  width: calc(var(--cdpi-cell) * 8);
+}
+
+.cdp-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--cdpi-cell);
+  margin-bottom: 0.15rem;
+}
+.cdp-nav-title {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 0.15rem;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+.cdp-nav-btn,
+.cdp-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+.cdp-nav-btn {
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--cdpi-muted);
+  border-radius: 50% !important;
+}
+.cdp-nav-btn:hover:not(:disabled) {
+  color: var(--cdpi-fg);
+  background: var(--cdpi-hover) !important;
+}
+.cdp-nav-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+.cdp-nav-btn svg {
+  display: block;
+  width: 1.05rem;
+  height: 1.05rem;
+}
+[dir="rtl"] .cdp-nav-btn svg {
+  transform: scaleX(-1);
+}
+.cdp-nav-spacer {
+  flex: none;
+  width: 2.25rem;
+}
+.cdp-link {
+  padding: 0.3rem 0.55rem;
+  font-weight: 700;
+  color: var(--cdpi-fg);
+  border-radius: 0.5rem !important;
+}
+.cdp-link:hover:not(:disabled) {
+  background: var(--cdpi-hover) !important;
+}
+.cdp-link:disabled {
+  cursor: default;
+}
+.cdp-nav-btn:focus-visible,
+.cdp-link:focus-visible,
+.cdp-foot-btn:focus-visible,
+.cdp-preset:focus-visible,
+.cdp-sheet-close:focus-visible {
+  outline: 2px solid var(--cdpi-accent);
+  outline-offset: 1px;
+}
+
+/* Gün adları ve hücreler */
+.cdp-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+.cdp-wk .cdp-row {
+  grid-template-columns: repeat(8, 1fr);
+}
+.cdp-dow {
+  display: grid;
+  place-items: center;
+  height: 2rem;
+  font-size: 0.74em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--cdpi-faint);
+  text-transform: uppercase;
+}
+.cdp-wnum {
+  display: grid;
+  place-items: center;
+  height: var(--cdpi-cell);
+  font-size: 0.74em;
+  font-weight: 600;
+  color: var(--cdpi-faint);
+}
+
+.cdp-day {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: var(--cdpi-cell);
+  padding: 0;
+  color: var(--cdpi-fg);
+  cursor: pointer;
+  outline: 0;
+}
+/* Aralık bandı: hücreler arasında kesintisiz uzanır */
+.cdp-day::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  right: 0;
+  bottom: 3px;
+  left: 0;
+  background: var(--cdpi-accent-soft);
+  opacity: 0;
+}
+.cdp-day.cdp-in::before,
+.cdp-day.cdp-pv::before,
+.cdp-day.cdp-rs::before,
+.cdp-day.cdp-re::before {
+  opacity: 1;
+}
+.cdp-day.cdp-pv::before {
+  opacity: 0.65;
+}
+.cdp-day.cdp-rs:not(.cdp-re)::before {
+  inset-inline-start: 50%;
+  left: 50%;
+}
+.cdp-day.cdp-re:not(.cdp-rs)::before {
+  inset-inline-end: 50%;
+  right: 50%;
+}
+[dir="rtl"] .cdp-day.cdp-rs:not(.cdp-re)::before { left: 0; right: 50%; }
+[dir="rtl"] .cdp-day.cdp-re:not(.cdp-rs)::before { right: 0; left: 50%; }
+.cdp-day.cdp-rs.cdp-re::before {
+  opacity: 0;
+}
+.cdp-day.cdp-c0.cdp-in::before,
+.cdp-day.cdp-c0.cdp-pv::before {
+  border-start-start-radius: 999px;
+  border-end-start-radius: 999px;
+}
+.cdp-day.cdp-c6.cdp-in::before,
+.cdp-day.cdp-c6.cdp-pv::before {
+  border-start-end-radius: 999px;
+  border-end-end-radius: 999px;
+}
+.cdp-num {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: calc(var(--cdpi-cell) - 0.35rem);
+  height: calc(var(--cdpi-cell) - 0.35rem);
+  font-variant-numeric: tabular-nums;
+  border-radius: 50%;
+  transition: background-color 0.12s ease, color 0.12s ease, box-shadow 0.12s ease;
+}
+.cdp-day:hover:not(.cdp-dis):not(.cdp-sel) .cdp-num {
+  background: var(--cdpi-hover);
+}
+.cdp-day.cdp-out {
+  color: var(--cdpi-faint);
+}
+.cdp-day.cdp-today .cdp-num {
+  font-weight: 800;
+  color: var(--cdpi-accent-text);
+  box-shadow: inset 0 0 0 1.5px var(--cdpi-accent);
+}
+.cdp-day.cdp-sel .cdp-num,
+.cdp-day.cdp-rs .cdp-num,
+.cdp-day.cdp-re .cdp-num {
+  font-weight: 700;
+  color: var(--cdpi-on-accent);
+  background: var(--cdpi-accent);
+  box-shadow: none;
+}
+.cdp-day.cdp-in .cdp-num {
+  color: var(--cdpi-accent-text);
+}
+.cdp-day.cdp-dis {
+  color: var(--cdpi-faint);
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+.cdp-day.cdp-dis .cdp-num {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+/* Klavye imleci: yalnızca klavye kullanılırken görünür */
+.cdp-kb .cdp-day.cdp-act .cdp-num,
+.cdp-kb .cdp-cell.cdp-act {
+  outline: 2px solid var(--cdpi-accent);
+  outline-offset: 1px;
+}
+.cdp-inline .cdp-day:focus-visible .cdp-num {
+  outline: 2px solid var(--cdpi-accent);
+  outline-offset: 1px;
+}
+
+/* Ay / yıl seçimi */
+.cdp-grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.35rem;
+  padding-top: 0.25rem;
+}
+.cdp-cell {
+  height: calc(var(--cdpi-cell) * 1.35);
+  padding: 0 0.25rem;
+  font-weight: 600;
+  color: var(--cdpi-fg);
+  cursor: pointer;
+  border-radius: 0.75rem !important;
+  transition: background-color 0.12s ease;
+}
+.cdp-cell:hover:not(:disabled):not(.cdp-sel) {
+  background: var(--cdpi-hover) !important;
+}
+.cdp-cell.cdp-now {
+  color: var(--cdpi-accent-text);
+  box-shadow: inset 0 0 0 1.5px var(--cdpi-accent);
+}
+.cdp-cell.cdp-sel {
+  color: var(--cdpi-on-accent);
+  background: var(--cdpi-accent) !important;
+}
+.cdp-cell:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+.cdp-cell.cdp-out {
+  color: var(--cdpi-faint);
+}
+
+/* Alt çubuk */
+.cdp-foot {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--cdpi-divider);
+}
+.cdp-foot-btn {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.88em;
+  font-weight: 700;
+  color: var(--cdpi-accent-text);
+  cursor: pointer;
+  border-radius: 0.6rem !important;
+  transition: background-color 0.15s ease;
+}
+.cdp-foot-btn:hover {
+  background: var(--cdpi-accent-soft) !important;
+}
+.cdp-foot-btn.cdp-muted {
+  color: var(--cdpi-muted);
+}
+.cdp-foot-btn.cdp-muted:hover {
+  color: var(--cdpi-fg);
+  background: var(--cdpi-hover) !important;
+}
+.cdp-foot-btn.cdp-primary {
+  color: var(--cdpi-on-accent);
+  background: var(--cdpi-accent) !important;
+}
+.cdp-foot-btn.cdp-primary:hover {
+  filter: brightness(1.08);
+}
+.cdp-foot-spacer {
+  flex: 1;
+}
+
+/* ------------------------------------------------------------------ */
+/* Mobil: alttan açılan sayfa                                           */
+/* ------------------------------------------------------------------ */
+.cdp-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(15, 23, 42, 0.5);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  touch-action: none;
+  animation: cdp-fade 0.18s ease;
+}
+.cdp-popup.cdp-sheet {
+  top: auto;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: auto;
+  max-width: none;
+  max-height: 90vh;
+  max-height: 90dvh;
+  padding: 0.75rem 0.75rem max(env(safe-area-inset-bottom, 0px), 0.75rem);
+  border-width: 1px 0 0;
+  border-radius: 1.25rem 1.25rem 0 0;
+  transform-origin: bottom center;
+}
+.cdp-popup.cdp-sheet.cdp-show {
+  animation: cdp-sheet 0.26s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.cdp-sheet .cdp-cal {
+  justify-content: center;
+}
+.cdp-sheet .cdp-month,
+.cdp-sheet .cdp-month.cdp-wk {
+  width: 100%;
+  max-width: 24rem;
+}
+.cdp-sheet {
+  --cdpi-cell: var(--cdp-cell, min(2.9rem, calc((100vw - 1.5rem) / 7)));
+}
+.cdp-sheet.cdp-has-wk {
+  --cdpi-cell: var(--cdp-cell, min(2.9rem, calc((100vw - 1.5rem) / 8)));
+}
+
+/* Animasyonlar ve erişilebilirlik */
+@keyframes cdp-pop {
+  from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes cdp-pop-up {
+  from { opacity: 0; transform: translateY(6px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes cdp-sheet {
+  from { transform: translateY(100%); }
+  to { transform: none; }
+}
+@keyframes cdp-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cdp-root *,
+  .cdp-popup,
+  .cdp-backdrop {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+@media (forced-colors: active) {
+  .cdp-popup {
+    border: 1px solid CanvasText;
+  }
+  .cdp-day.cdp-sel .cdp-num,
+  .cdp-day.cdp-rs .cdp-num,
+  .cdp-day.cdp-re .cdp-num,
+  .cdp-cell.cdp-sel {
+    forced-color-adjust: none;
+    color: HighlightText;
+    background: Highlight !important;
+  }
+}
+@media print {
+  .cdp-float,
+  .cdp-backdrop {
+    display: none !important;
+  }
+}

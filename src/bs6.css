@@ -1,0 +1,316 @@
+/*!
+ * Bootstrap 6 uyumluluk katmanı 1.0 (MIT) — stil dosyası
+ * CustomSelect · CustomScrollbar · CustomDatePicker  ×  Bootstrap 6 (alpha) form-floating / form-adorn
+ *
+ * Tüm eklenti CSS dosyalarından SONRA yüklenmelidir.
+ * İsteğe bağlıdır: yüklenmezse eklentiler kendi varsayılan temalarıyla çalışır.
+ *
+ * 1) Renk / yarıçap / boyut: eklentilerin --cs-* / --cdp-* / --ccs-* değişkenleri Bootstrap'in
+ *    --bs-* token'larına bağlanır. Bootstrap'in light-dark() değerleri koyu temada kendiliğinden
+ *    doğru çözülür (menü ve takvim color-scheme'i de taşır).
+ * 2) .form-floating: etiket Bootstrap'te zaten kontrolün üstünde yüzer; select tetikleyicisi
+ *    Bootstrap'in yükseklik / iç boşluk token'larıyla aynı ölçüye getirilir.
+ * 3) .form-adorn: tetikleyici "ghost" (çerçevesiz) olur; çerçeve ve odak halkasını sarmalayıcı verir.
+ */
+
+/* ------------------------------------------------------------------ */
+/* 1) Token eşlemesi                                                   */
+/* ------------------------------------------------------------------ */
+.cs-root {
+  --cs-accent: var(--bs-primary-bg);
+  --cs-accent-soft: var(--bs-primary-bg-subtle);
+  --cs-accent-text: var(--bs-primary-fg);
+  --cs-on-accent: var(--bs-primary-contrast);
+  --cs-ring: var(--bs-primary-focus-ring);
+  --cs-bg: var(--bs-btn-input-bg);
+  --cs-fg: var(--bs-fg-body);
+  --cs-muted: var(--bs-fg-2);
+  /* --bs-control-placeholder-color yalnızca .form-control elemanında tanımlıdır (kökte yok); değeri --bs-fg-3'tür */
+  --cs-placeholder: var(--bs-fg-3);
+  --cs-border: var(--bs-border-color);
+  --cs-border-hover: var(--bs-border-color);
+  --cs-divider: var(--bs-border-color);
+  --cs-menu-bg: var(--bs-bg-body);
+  --cs-hover: var(--bs-bg-2);
+  --cs-danger: var(--bs-danger-border);
+  --cs-danger-ring: var(--bs-danger-focus-ring);
+  --cs-radius: var(--bs-btn-input-border-radius);
+  --cs-font-size: var(--bs-btn-input-font-size);
+}
+/* Yükseklik: yalnızca varsayılan boyutta (sm / lg eklentinin kendi ölçüsünden ya da BS token'ından) */
+.cs-select:not(.cs-sm):not(.cs-lg) { --cs-height: var(--bs-btn-input-min-height); }
+.cs-select.cs-sm { --cs-height: var(--bs-btn-input-sm-min-height, 2rem); --cs-font-size: var(--bs-btn-input-sm-font-size, .875rem); }
+.cs-select.cs-lg { --cs-height: var(--bs-btn-input-lg-min-height, 3rem); --cs-font-size: var(--bs-btn-input-lg-font-size, 1.125rem); }
+
+.cdp-root,
+.cdp-input {
+  --cdp-accent: var(--bs-primary-bg);
+  --cdp-accent-soft: var(--bs-primary-bg-subtle);
+  --cdp-accent-text: var(--bs-primary-fg);
+  --cdp-on-accent: var(--bs-primary-contrast);
+  --cdp-ring: var(--bs-primary-focus-ring);
+  --cdp-bg: var(--bs-bg-body);
+  --cdp-fg: var(--bs-fg-body);
+  --cdp-muted: var(--bs-fg-2);
+  --cdp-faint: var(--bs-fg-3);
+  --cdp-border: var(--bs-border-color);
+  --cdp-divider: var(--bs-border-color);
+  --cdp-hover: var(--bs-bg-2);
+  --cdp-radius: var(--bs-radius-6, var(--bs-btn-input-border-radius));
+}
+
+/* Bağımsız çubuk. Menü içindeki köprülü çubuk (.cs-scroll) select'in kendi token'larını kullanır. */
+.ccs-root:not(.cs-scroll),
+.ccs-native,
+.ccs-hide {
+  --ccs-thumb: color-mix(in oklch, var(--bs-fg-body) 32%, transparent);
+  --ccs-thumb-hover: color-mix(in oklch, var(--bs-fg-body) 52%, transparent);
+  --ccs-accent: var(--bs-primary-bg);
+  --ccs-track: color-mix(in oklch, var(--bs-fg-body) 10%, transparent);
+  --ccs-ring: var(--bs-primary-focus-ring);
+}
+
+/* ------------------------------------------------------------------ */
+/* Tetikleyici: Bootstrap .form-control görünümü                       */
+/* ------------------------------------------------------------------ */
+.cs-trigger {
+  padding-block: var(--bs-btn-input-padding-y);
+  padding-inline-start: var(--bs-btn-input-padding-x);
+  line-height: var(--bs-btn-input-line-height);
+  box-shadow: var(--bs-box-shadow-inset, none);
+}
+/* Odak halkası: .form-control:focus-visible ile aynı (outline), Bootstrap'in kendi token'ı */
+.cs-trigger:focus-visible,
+.cs-open > .cs-trigger {
+  border-color: var(--bs-border-color);
+  box-shadow: var(--bs-box-shadow-inset, none);
+  outline: var(--bs-focus-ring);
+  outline-offset: -1px;
+}
+.cs-invalid > .cs-trigger:focus-visible,
+.cs-invalid.cs-open > .cs-trigger {
+  border-color: var(--bs-danger-border);
+  box-shadow: none;
+  outline: var(--bs-focus-ring-width) solid var(--bs-danger-focus-ring);
+}
+
+/*
+ * is-valid: Bootstrap bunu .form-control'e (kenarlık = --bs-success-border) ve odakta yeşil halkaya çevirir.
+ * Eklenti yalnızca is-invalid'i tanıdığı için tetikleyici gri kalıyordu. Gizli <select> üzerindeki
+ * sınıf, hemen ardındaki .cs-select sarmalayıcısına kardeş seçiciyle aktarılır.
+ * (.form-adorn içinde kenarlığı zaten Bootstrap'in :has() kuralı verir.)
+ */
+select.cs-native.is-valid + .cs-select > .cs-trigger {
+  border-color: var(--bs-success-border);
+}
+select.cs-native.is-valid + .cs-select > .cs-trigger:focus-visible,
+select.cs-native.is-valid + .cs-select.cs-open > .cs-trigger {
+  border-color: var(--bs-success-border);
+  outline: var(--bs-focus-ring-width) solid var(--bs-success-focus-ring);
+}
+
+/* data-bs-validate formları: Bootstrap doğrulamayı gizli <select> üzerinde :user-invalid ile yapar */
+[data-bs-validate] select.cs-native:user-invalid + .cs-select > .cs-trigger {
+  border-color: var(--bs-danger-border);
+}
+[data-bs-validate] select.cs-native:user-invalid + .cs-select > .cs-trigger:focus-visible,
+[data-bs-validate] select.cs-native:user-invalid + .cs-select.cs-open > .cs-trigger {
+  outline: var(--bs-focus-ring-width) solid var(--bs-danger-focus-ring);
+}
+[data-bs-validate~="valid"] select.cs-native:user-valid + .cs-select > .cs-trigger {
+  border-color: var(--bs-success-border);
+}
+
+/* ------------------------------------------------------------------ */
+/* Menüdeki arama kutusu: Bootstrap .form-control                       */
+/* ------------------------------------------------------------------ */
+/*
+ * JS arama <input>'una .form-control sınıfını ekler; Bootstrap'in --bs-control-* token'ları
+ * (ve -sm/-lg varyantları) o elemanda tanımlıdır. Eklentinin kendi .cs-search kuralları
+ * sonra yüklendiği için kazanır; burada aynı özellikler Bootstrap token'larına geri verilir.
+ * Sol boşluk arama simgesi içindir.
+ */
+.cs-search.form-control {
+  height: auto;
+  min-height: var(--bs-control-min-height);
+  padding: var(--bs-control-padding-y) var(--bs-control-padding-x);
+  padding-inline: 2.35em var(--bs-control-padding-x);
+  font-size: var(--bs-control-font-size);
+  line-height: var(--bs-control-line-height);
+  color: var(--bs-control-fg);
+  background: var(--bs-control-bg);
+  border: var(--bs-control-border-width) solid var(--bs-control-border-color);
+  border-radius: var(--bs-control-border-radius);
+  box-shadow: var(--bs-control-box-shadow);
+}
+.cs-search.form-control::placeholder {
+  color: var(--bs-control-placeholder-color);
+}
+/* Odak: eklentinin vurgu halkası yerine Bootstrap'in outline'ı (.form-control:focus-visible) */
+.cs-search.form-control:focus {
+  background: var(--bs-control-bg);
+  border-color: var(--bs-control-border-color);
+  box-shadow: var(--bs-control-box-shadow);
+}
+/* Eklentinin `outline:0` kuralı katmanlı Bootstrap kuralını ezdiği için halka açıkça verilir */
+.cs-search.form-control:focus-visible {
+  outline: var(--bs-focus-ring);
+  outline-offset: -1px;
+}
+.cs-menu.cs-sheet .cs-search.form-control {
+  min-height: 2.75rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* 2) .form-floating                                                   */
+/* ------------------------------------------------------------------ */
+/*
+ * <div class="form-floating">
+ *   <label for="x">Şehir</label>
+ *   <select id="x" class="form-control">…</select>
+ * </div>
+ * Bootstrap etiketi `:has(~ .form-control:is(select))` ile her zaman yüzdürür; gizli native select
+ * DOM'da kardeş olarak kaldığı için bu kural çalışmaya devam eder. Etiket (z-index:2,
+ * pointer-events:none) bizim sarmalayıcının üstünde kalır, tıklamalar tetikleyiciye geçer.
+ */
+.form-floating {
+  position: relative;
+}
+/*
+ * Etiket yüksekliği kontrolün yüksekliği kadar olsun. Bootstrap'te `height:100%` olduğundan,
+ * .form-floating içine konan .valid-feedback / .invalid-feedback görününce kutu uzar ve etiket
+ * (align-items:center) kontrolün ortasından aşağı kayar, değerin üstüne biner.
+ * Metin alanında özel yükseklik zaten --bs-form-floating-height ile verildiği için o da doğru kalır.
+ */
+.form-floating > label {
+  height: var(--bs-form-floating-height);
+}
+.form-floating > .cs-select > .cs-trigger {
+  align-items: flex-end;
+  min-height: var(--bs-form-floating-height);
+  padding-block: var(--bs-form-floating-input-padding-t) var(--bs-form-floating-input-padding-b);
+  padding-inline-start: var(--bs-form-floating-padding-x);
+  line-height: var(--bs-form-floating-line-height);
+}
+/*
+ * Çoklu seçim rozetleri (floating): kutu yüksekliği sabit (62px) ve üst kısmı yüzen etikete ait.
+ * Varsayılan rozet 24px olduğundan etiketin metnine değiyordu. Rozetler küçülür ve biraz aşağı
+ * iner; etiketle aralarında nefes payı kalır.
+ */
+.form-floating > .cs-select.cs-multi > .cs-trigger {
+  padding-bottom: 0.5rem;
+}
+.form-floating > .cs-select.cs-multi .cs-chip {
+  min-height: 1.25rem;
+  padding-block: 0;
+  padding-inline: 0.5rem 0.25rem;
+  font-size: 0.75em;
+  line-height: 1.25;
+}
+.form-floating > .cs-select.cs-multi .cs-chip-more {
+  padding-inline: 0.5rem;
+}
+.form-floating > .cs-select.cs-multi .cs-chip-x {
+  width: 1rem;
+  height: 1rem;
+}
+.form-floating > .cs-select.cs-multi .cs-chip-x svg {
+  width: 0.5625rem;
+  height: 0.5625rem;
+}
+
+/*
+ * Datepicker girişi: etiket hep yukarıda, tarih biçimi (gg.aa.yyyy) hep görünür.
+ * Boş bir floating input'ta etiket ortada durur ve yer tutucu gizlidir; takvim alanında bu çok boş
+ * görünüyordu. Bootstrap'in `.form-floating-always` kuralları (etiket dönüşümü, giriş iç boşluğu,
+ * yer tutucu rengi) .cdp-input içeren her .form-floating için otomatik uygulanır; markup'a ayrıca
+ * sınıf yazmak gerekmez. (Biçim, datepicker'ın placeholder'ından gelir; `placeholder` seçeneğiyle değişir.)
+ */
+.form-floating:has(> .cdp-input) > label {
+  transform: var(--bs-form-floating-label-transform);
+}
+.form-floating > .cdp-input.form-control {
+  padding-top: var(--bs-form-floating-input-padding-t);
+  padding-bottom: var(--bs-form-floating-input-padding-b);
+}
+.form-floating > .cdp-input.form-control::placeholder,
+.form-floating > .cdp-input.form-control:focus::placeholder {
+  color: var(--bs-control-placeholder-color);
+}
+
+/* Uzun etiket ok / temizle düğmesinin altına girmesin */
+/* Etiket yüzerken %85 küçülür (--bs-form-floating-label-transform); pay görünen genişliğe göre hesaplanır */
+.form-floating:has(> .cs-select) > label {
+  max-width: calc((100% - 2.75rem) / 0.85);
+}
+.form-floating:has(> .cs-select.cs-has-clear) > label {
+  max-width: calc((100% - 4.5rem) / 0.85);
+}
+
+/* ------------------------------------------------------------------ */
+/* 3) .form-adorn                                                      */
+/* ------------------------------------------------------------------ */
+/*
+ * <label class="form-control form-adorn">
+ *   <span class="form-adorn-text" aria-hidden="true">₺</span>
+ *   <select class="form-ghost" aria-label="Para birimi">…</select>      (ya da <input class="form-ghost">)
+ * </label>
+ * Çerçeve, arka plan, yükseklik ve odak halkasını .form-adorn verir; tetikleyici çerçevesiz olur.
+ */
+.form-adorn > .cs-select {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+.form-adorn.form-adorn-end > .cs-select {
+  order: -1;
+}
+.form-adorn .cs-trigger {
+  min-height: 0;
+  padding: 0;
+  padding-inline: 0 1.5rem;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  outline: 0;
+}
+.form-adorn .cs-has-clear > .cs-trigger {
+  padding-inline: 0 3.25rem;
+}
+.form-adorn .cs-trigger:focus-visible,
+.form-adorn .cs-open > .cs-trigger {
+  border: 0;
+  box-shadow: none;
+  outline: 0;
+}
+.form-adorn .cs-arrow {
+  right: 0;
+  inset-inline-end: 0;
+}
+.form-adorn .cs-clear {
+  right: 1.5rem;
+  inset-inline-end: 1.5rem;
+}
+/* Menü açıkken odak arama kutusuna geçer (menü <body>'dedir): halka sarmalayıcıda kalsın */
+.form-adorn:has(.cs-open) {
+  outline: var(--bs-focus-ring);
+  outline-offset: -1px;
+}
+.form-adorn:has(.cs-open .cs-invalid, .cs-invalid.cs-open) {
+  outline-color: var(--bs-danger-focus-ring);
+}
+.form-adorn:has(select.is-valid):has(.cs-open) {
+  outline-color: var(--bs-success-focus-ring);
+}
+/* Takvim girişi çerçevesiz ghost ise tarih popup'ı sarmalayıcıya hizalanır (JS) */
+.form-adorn > .cdp-input {
+  cursor: text;
+}
+/* Etiket üstündeki tıklamaların imleci: bileşen tetikleyici olarak davranır */
+.form-adorn:has(> .cs-select) {
+  cursor: pointer;
+}

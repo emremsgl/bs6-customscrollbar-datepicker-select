@@ -1,0 +1,67 @@
+{
+  "name": "bs6-custom-ui",
+  "version": "1.0.0",
+  "description": "Custom select, date picker and scrollbar for Bootstrap 6 (form-floating, form-adorn, dialog). Zero runtime dependencies.",
+  "keywords": [
+    "bootstrap",
+    "bootstrap6",
+    "select",
+    "datepicker",
+    "scrollbar",
+    "form-floating",
+    "form-adorn",
+    "ui"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/bs6-custom-ui.cjs",
+  "module": "dist/bs6-custom-ui.esm.js",
+  "unpkg": "dist/bs6-custom-ui.min.js",
+  "jsdelivr": "dist/bs6-custom-ui.min.js",
+  "style": "dist/bs6-custom-ui.min.css",
+  "types": "types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./dist/bs6-custom-ui.esm.js",
+      "require": "./dist/bs6-custom-ui.cjs"
+    },
+    "./css": "./dist/bs6-custom-ui.css",
+    "./css/min": "./dist/bs6-custom-ui.min.css",
+    "./dist/*": "./dist/*"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "dist",
+    "types",
+    "src",
+    "README.md",
+    "README.tr.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/",
+    "check": "npm run build && npm test",
+    "serve": "node scripts/serve.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "jsdom": "^31.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OWNER/REPO.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OWNER/REPO/issues"
+  },
+  "homepage": "https://github.com/OWNER/REPO#readme",
+  "author": "<AUTHOR>"
+}
