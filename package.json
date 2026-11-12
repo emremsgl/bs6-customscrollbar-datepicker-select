@@ -57,11 +57,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/emremsgl/bs6-custom-ui.git"
+    "url": "git+https://github.com/emremsgl/bs6-customscrollbar-datepicker-select.git"
   },
   "bugs": {
-    "url": "https://github.com/emremsgl/bs6-custom-ui/issues"
+    "url": "https://github.com/emremsgl/bs6-customscrollbar-datepicker-select/issues"
   },
-  "homepage": "https://github.com/emremsgl/bs6-custom-ui#readme",
+  "homepage": "https://github.com/emremsgl/bs6-customscrollbar-datepicker-select#readme",
   "author": "emremsgl"
 }

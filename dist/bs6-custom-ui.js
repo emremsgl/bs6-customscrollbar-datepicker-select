@@ -1,4 +1,4 @@
-/*! bs6-custom-ui v1.0.0 | MIT License | https://github.com/emremsgl/bs6-custom-ui */
+/*! bs6-custom-ui v1.0.0 | MIT License | https://github.com/emremsgl/bs6-customscrollbar-datepicker-select */
 var BS6UI = (() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
