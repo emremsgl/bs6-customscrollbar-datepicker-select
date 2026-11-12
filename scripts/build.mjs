@@ -17,7 +17,8 @@ const src = (f) => join(root, 'src', f);
 // Bootstrap 6'nın alt sınırı (Chrome/Edge 130, Firefox 132, Safari 18): kaynak dönüştürülmez, :has / color-mix korunur
 const target = ['chrome130', 'firefox132', 'safari18'];
 
-const banner = `/*! ${pkg.name} v${pkg.version} | MIT License | ${pkg.repository?.url ?? 'https://github.com/OWNER/REPO'} */`;
+const repoUrl = (pkg.repository?.url ?? '').replace(/^git\+/, '').replace(/\.git$/, '');
+const banner = `/*! ${pkg.name} v${pkg.version} | MIT License | ${repoUrl} */`;
 
 rmSync(dist, { recursive: true, force: true });
 mkdirSync(dist, { recursive: true });

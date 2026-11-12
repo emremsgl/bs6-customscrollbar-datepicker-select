@@ -1,4 +1,4 @@
-/*! bs6-custom-ui v1.0.0 | MIT License | git+https://github.com/OWNER/REPO.git */
+/*! bs6-custom-ui v1.0.0 | MIT License | https://github.com/emremsgl/bs6-custom-ui */
 var BS6UI = (() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;

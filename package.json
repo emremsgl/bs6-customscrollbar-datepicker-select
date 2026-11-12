@@ -57,11 +57,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OWNER/REPO.git"
+    "url": "git+https://github.com/emremsgl/bs6-custom-ui.git"
   },
   "bugs": {
-    "url": "https://github.com/OWNER/REPO/issues"
+    "url": "https://github.com/emremsgl/bs6-custom-ui/issues"
   },
-  "homepage": "https://github.com/OWNER/REPO#readme",
-  "author": "<AUTHOR>"
+  "homepage": "https://github.com/emremsgl/bs6-custom-ui#readme",
+  "author": "emremsgl"
 }
